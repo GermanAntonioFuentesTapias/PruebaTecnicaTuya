@@ -22,3 +22,15 @@ Con el WHERE o.fecha_orden >= '2021-01-010' AND o.fecha_orden <= CURRENT_DATE();
 ### 3.  Listado total de clientes con la cantidad total de órdenes realizadas (conteo), el valor total gastado en todas sus órdenes (suma), y el nombre del producto que más ha comprado (nombre del producto más frecuente).
 
 Explicación: Con el FROM cliente c: se parte de la tabla cliente con alias c para que con el LEFT JOIN orden o ON c.cedula = o.cedula: se une con la tabla de órdenes para contar cuántas hizo cada cliente. Se usa LEFT JOIN para no excluir a los que no han comprado nada. Se realiza otro LEFT JOIN ClienteProductoMasComprado cpmc ON c.cedula = cpmc.cedula: se conecta la CTE que contiene el producto más comprado. Teniendo un valor adicional para asi con COUNT(DISTINCT o.id_orden): asegurando que se cuenten solo órdenes distintas por cliente. Con SUM(o.total_pedido) se suma el total gastado por cliente. para luego agrupar el MAX(CASE WHEN cpmc.rn = 1 THEN cpmc.nombre_producto END) con el que se retorna el producto más comprado por el grupo de interes cliente, ya que rn = 1 representa el top 1 y MAX ignora NULL. Se agrupa con GROUP BY c.cedula, c.nombre por cliente y se ordena ORDER BY cantidad_total_ordenes DESC: se ordena desde el que más órdenes hizo al que menos.
+
+##4.  Detalle completo (datos del cliente, fecha, nombre producto, cantidad) del pedido cuyo monto fue el más grande (en valor, no en unidades) en el año 2020.
+
+Explicación:
+
+##5. Valor total vendido por mes y año.
+Explicación:
+
+##6.Para el cliente con cédula 123456, especificar para cada producto, el número de veces que lo ha comprado y el valor total gastado en dicho producto. Ordenar el resultado de mayor a menor.
+Explicación:
+
+##7. Si necesitas actualizar una tabla histórica con los datos del último mes, y en este nuevo mes has incluido una nueva columna para la ciudad del cliente, ¿qué proceso seguirías para evitar conflictos por diferencia de dimensiones, considerando que no tienes acceso a los comandos ADD COLUMN o ALTER TABLE?
