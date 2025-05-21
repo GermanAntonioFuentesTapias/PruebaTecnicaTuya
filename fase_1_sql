@@ -1,0 +1,9 @@
+--sql
+'''
+SELECT
+    COUNT(id_orden) AS total_ordenes
+FROM
+    orden;
+'''
+
+"""
