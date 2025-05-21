@@ -17,3 +17,96 @@ WHERE
     o.fecha_orden >= '2021-01-01' AND o.fecha_orden <= CURRENT_DATE();
 -- (GETDATE o NOW())
 '''
+--sql Consulta 3
+'''
+WITH ClienteProductoMasComprado AS (
+    SELECT
+        c.cedula,
+        p.nombre_producto,
+        COUNT(d.cantidad) AS cantidad_comprada,
+        ROW_NUMBER() OVER (PARTITION BY c.cedula ORDER BY COUNT(d.cantidad) DESC, p.nombre_producto ASC) AS rn
+    FROM
+        cliente c
+    INNER JOIN
+        orden o ON c.cedula = o.cedula
+    INNER JOIN
+        detalle_orden d ON o.id_orden = d.id_orden
+    INNER JOIN
+        producto p ON d.id_producto = p.id_producto
+    GROUP BY
+        c.cedula, p.nombre_producto
+)
+SELECT
+    c.id_cliente,
+    c.nombre AS nombre_cliente,
+    COUNT(o.id_orden) AS cantidad_total_ordenes,
+    SUM(o.total_pedido) AS valor_total_gastado,
+    MAX(CASE WHEN cpmc.rn = 1 THEN cpmc.nombre_producto ELSE NULL END) AS producto_mas_comprado
+FROM
+    cliente c
+LEFT JOIN
+    orden o ON c.cedula = o.cedula
+LEFT JOIN
+    ClienteProductoMasComprado cpmc ON c.cedula = cpmc.cedula
+WHERE
+    cpmc.rn = 1 OR cpmc.cedula IS NULL -- Asegura que incluya clientes sin órdenes y que solo traiga el producto principal
+GROUP BY
+    c.cedula, c.nombre
+ORDER BY
+    cantidad_total_ordenes DESC;
+'''
+--sql Consulta 4
+'''
+SELECT
+      c.nombre As cliente_nombre,
+      c.telefono As cliente_telefono,
+      o.fecha_orden,
+      o.total_pedido,
+      p.nombre_producto,
+      do.cantidad
+FROM
+    cliente c
+INNER JOIN 
+    orden o ON c.cedula = o.cedula
+
+'''
+-- sql Consulta 5
+'''
+SELECT
+     YEAR(fecha_orden) AS Año, --- Para SQL Server
+     MONTH(fecha_orden) AS Mes,
+     SUM(total_pedido) AS valor_total_vendido_AM
+FROM
+    orden
+GROUP BY
+   YEAR(fecha_orden),
+   MONTH(fecha_orden)
+ORDER BY
+  Año,Mes;
+'''
+--- sql Consulta 6
+'''
+SELECT
+      pr.nombre_producto,
+      COUNT(DISTINCT o.id_orden) AS Cantidad_veces_comprado,
+      SUM(do.cantidad * do.precio_unitario) As Valor_total_en_producto
+FROM
+     cliente c
+INNER JOIN
+   orden o ON c.cedula = o.cedula
+INNER JOIN
+   detalle_orden do ON o.id_orden = do.id_orden
+INNER JOIN
+   producto pr ON do.id_producto = pr.id_producto
+WHERE
+    c.cedula = 123456
+GROUP BY
+    pr.nombre_producto
+ORDER BY
+    Valor_total_en_producto DESC;
+'''
+-- sql Consulta 7
+'''
+
+'''
+
