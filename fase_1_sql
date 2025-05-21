@@ -1,9 +1,19 @@
---sql
+--sql Consultaa 1
 '''
 SELECT
     COUNT(id_orden) AS total_ordenes
 FROM
     orden;
 '''
-
-"""
+--sql Consulta 2
+'''
+SELECT
+    COUNT(DISTINCT c.cedula) AS numero_clientes_con_ordenes
+FROM
+    cliente c
+INNER JOIN
+    orden o ON c.cedula = o.cedula
+WHERE
+    o.fecha_orden >= '2021-01-01' AND o.fecha_orden <= CURRENT_DATE();
+-- (GETDATE o NOW())
+'''
