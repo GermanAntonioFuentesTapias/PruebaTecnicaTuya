@@ -148,13 +148,16 @@ Ejecutivo Comercial Fin de Semana: 0.10714
 Ejecutivo Comercial Medio Tiempo: 0.09232
 Ejecutivo Comercial: 0.08589
 Conclusión Inicial: A nivel global, el Ejecutivo Comercial Fin de Semana es el más eficiente en términos de productividad por unidad de costo.
-Segmentos de Puntos de Venta (Fase 3):
+### 📈 Determinación del número óptimo de clusters:
+Se usó el **método del codo**, que sugirió **K = 3**.
 
-Cluster 0: "Puntos de Venta de Bajo Rendimiento General"
-Caracterizados por bajos valores en casi todas las métricas, incluyendo tráfico, capturas y contribución.
-Cluster 1: "Puntos de Venta de Alto Volumen de Tarjetas / Solo Tarjetas"
-Altamente especializados en capturas de tarjetas (muy altas), pero con métricas casi nulas en créditos, seguros y tráfico general. Tienen una contribución alta impulsada por tarjetas.
-Cluster 2: "Puntos de Venta de Rendimiento Medio y Balanceado"
+### 🧩 Segmentos encontrados:
+
+- **Cluster 0:** Bajo rendimiento general. Necesitan intervención o reducción de costos.
+- **Cluster 1:** Alta especialización en tarjetas. Muy eficientes en fines de semana.
+- **Cluster 2:** Buen rendimiento balanceado. Alta eficiencia en conversión de tráfico.
+
+---
 Rendimiento intermedio pero con buena eficiencia en la conversión (alta aprobacion_creditos, aprovechamiento_de_trafico).
 Justificación de Contratación (¿Qué cargo y dónde?):
 
@@ -176,6 +179,18 @@ La clave para incrementar los niveles de productividad de la compañía radica e
 Los Ejecutivos de Fin de Semana son excepcionalmente eficientes en puntos de venta especializados en tarjetas.
 Los Ejecutivos de Medio Tiempo son la opción más rentable para puntos de venta con bajo rendimiento y aquellos con un desempeño ya balanceado.
 La contratación a tiempo completo es la menos eficiente en términos de productividad por costo en todos los segmentos, aunque individualmente producen más. Esto sugiere que su alto costo requiere un retorno proporcionalmente más alto, lo cual no se observa en esta métrica.
+
+### Recomendaciones por segmento:
+
+| Cluster | Cargo Recomendado                    | Justificación |
+|---------|---------------------------------------|---------------|
+| 0       | Ejecutivo Medio Tiempo               | Ideal para zonas de bajo rendimiento por su bajo costo |
+| 1       | Ejecutivo Fin de Semana              | Alta eficiencia donde dominan las tarjetas |
+| 2       | Ejecutivo Medio Tiempo               | Balance costo/beneficio ideal para seguir escalando |
+
+---
+
+
 Próximos Pasos para Mejorar o Expandir el Análisis:
 
 Validación de Segmentos: Realizar una validación de los clusters con expertos de negocio. ¿Estos segmentos tienen sentido desde una perspectiva operativa?
