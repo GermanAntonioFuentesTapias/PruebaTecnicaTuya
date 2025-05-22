@@ -1,1 +1,70 @@
+import pandas as pd
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
+df_consulta = pd.read_excel('/content/Segmentacion_CATT.xlsx')
+
+df_catt = pd.read_excel('/content/Segmentacion_CATT.xlsx')
+
+print("--- df_consulta.head() ---")
+print(df_consulta.head().to_markdown(index=False, numalign="left", stralign="left"))
+print("\n--- df_consulta.info() ---")
+print(df_consulta.info())
+
+print("\n--- df_catt.head() ---")
+print(df_catt.head().to_markdown(index=False, numalign="left", stralign="left"))
+print("\n--- df_catt.info() ---")
+print(df_catt.info())
+
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+import numpy as np
+
+numerical_cols = df_catt.select_dtypes(include=np.number).columns.tolist()
+
+if 'canal' in numerical_cols:
+    numerical_cols.remove('canal')
+
+df_clustering = df_catt[numerical_cols].copy()
+
+
+imputer = SimpleImputer(strategy='mean')
+df_clustering_imputed = pd.DataFrame(imputer.fit_transform(df_clustering), columns=numerical_cols)
+
+
+scaler = StandardScaler()
+df_scaled = pd.DataFrame(scaler.fit_transform(df_clustering_imputed), columns=numerical_cols)
+
+print("Primeras 5 filas del DataFrame escalado (para clustering):")
+print(df_scaled.head().to_markdown(index=False, numalign="left", stralign="left"))
+
+sse = [] 
+k_range = range(1, 11) 
+
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10) 
+    kmeans.fit(df_scaled)
+    sse.append(kmeans.inertia_)
+
+
+plt.figure(figsize=(10, 6))
+plt.plot(k_range, sse, marker='o')
+plt.title('Elbow Method para determinar el número óptimo de clusters')
+plt.xlabel('Número de Clusters (K)')
+plt.ylabel('SSE (Suma de los Cuadrados de los Errores)')
+plt.xticks(k_range)
+plt.grid(True)
+plt.show()
+
+n_clusters = 3
+kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+df_catt['Cluster'] = kmeans.fit_predict(df_scaled)
+
+cluster_means = df_catt.groupby('Cluster')[numerical_cols].mean()
+
+print(f"\nCaracterísticas promedio de cada cluster (K={n_clusters}):")
+print(cluster_means.to_markdown(numalign="left", stralign="left"))
