@@ -194,9 +194,9 @@ La contratación a tiempo completo es la menos eficiente en términos de product
 Próximos Pasos para Mejorar o Expandir el Análisis:
 
 Validación de Segmentos: Realizar una validación de los clusters con expertos de negocio. ¿Estos segmentos tienen sentido desde una perspectiva operativa?
-Análisis de Atributos Cualitativos: Si se dispone de datos cualitativos (ej. tipo de ubicación del punto de venta, tamaño, demografía del área), incorporarlos al análisis para enriquecer la descripción de los clusters.
+Análisis de Atributos Cualitativos: Si se dispone de datos cualitativos , incorporarlos al análisis para enriquecer la descripción de los clusters.
 Análisis de Estacionalidad: La columna mes en la tabla de productividad podría usarse para ver si la productividad y la eficiencia por cargo varían estacionalmente, lo que podría informar sobre momentos óptimos para campañas de contratación.
-Optimización del Número de Clusters: Explorar otros métodos para determinar el número óptimo de clusters (ej. Silhouette Score) para confirmar o refinar la elección de K=3.
+Optimización del Número de Clusters: Explorar otros métodos para determinar el número óptimo de clusters  para confirmar o refinar la elección de K=3.
 Análisis de Contribución Marginal: Estudiar el impacto incremental de añadir un ejecutivo de cada tipo a cada cluster, en lugar de solo promedios, para entender el potencial de crecimiento.
 Simulación de Escenarios: Desarrollar un modelo que permita simular el impacto en la productividad total y en los costos al ajustar la composición de la fuerza laboral en cada tipo de punto de venta.
 Considerar la Retención: ¿Qué tipo de cargo tiene mayor o menor rotación? Esto podría influir en la decisión de contratación a largo plazo.
