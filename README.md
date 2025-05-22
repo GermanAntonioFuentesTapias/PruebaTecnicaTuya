@@ -26,11 +26,26 @@ Explicación: Con el FROM cliente c: se parte de la tabla cliente con alias c pa
 ##4.  Detalle completo (datos del cliente, fecha, nombre producto, cantidad) del pedido cuyo monto fue el más grande (en valor, no en unidades) en el año 2020.
 
 Explicación:
+SELECT c.nombre AS nombre_cliente, c.telefono AS telefono_cliente, o.fecha_orden, o.total_pedido, p.nombre_producto, do.cantidad: Selecciona todas las columnas de detalle solicitadas.
+Luego con FROM cliente c INNER JOIN orden o ... INNER JOIN detalle_orden do ... INNER JOIN producto p ...: Realiza los INNER JOIN necesarios para conectar todas las tablas y obtener la información completa del cliente, la orden, los productos y las cantidades.
+WHERE o.id_orden = (...): Aquí es donde la consulta principal utiliza el resultado de la subconsulta para filtrar y obtener los detalles de la orden específica que tiene el total_pedido más grande en 2020.
 
 ##5. Valor total vendido por mes y año.
 Explicación:
 
+Con SELECT STRFTIME('%Y', fecha_orden) AS año, STRFTIME('%m', fecha_orden) AS mes: Extrae el año (%Y) y el mes (%m) de la columna fecha_orden. Nota de compatibilidad de fechas:
+SQLite: YEAR(fecha_orden) y MONTH(fecha_orden). Con SUM(total_pedido) AS valor_total_vendido: Calcula la suma del total_pedido para cada grupo. Luego FROM orden: Indica que estamos operando sobre la tabla orden. Se agrupa con GROUP BY año, mes:  Esto asegura que la suma (SUM) se calcule para cada período mensual/anual.
+ORDER BY año, mes: Ordena el resultado cronológicamente por año y luego por mes, lo que facilita la lectura y el análisis de la tendencia.
+
+
 ##6.Para el cliente con cédula 123456, especificar para cada producto, el número de veces que lo ha comprado y el valor total gastado en dicho producto. Ordenar el resultado de mayor a menor.
 Explicación:
+Con SELECT pr.nombre_producto: Selecciona el nombre del producto. COUNT(DISTINCT o.id_orden) AS numero_veces_comprado:
+COUNT(DISTINCT o.id_orden) cuenta el número de órdenes distintas en las que este cliente ha comprado el producto. Si un cliente compra el mismo producto en la misma orden varias veces , esta cuenta solo una vez esa orden. Si la intención es contar cuántas líneas de pedido para ese producto ha tenido el cliente , entonces podrías usar COUNT(do.id_producto) o COUNT(*). La formulación COUNT(DISTINCT o.id_orden) suele ser más útil para "número de veces que lo ha comprado" a nivel de orden.
+SUM(do.cantidad * do.precio_unitario) AS valor_total_gastado_en_producto: Calcula el valor total gastado en cada producto. Multiplica la cantidad comprada de ese producto en la detalle_orden por su precio_unitario (que está en detalle_orden para reflejar el precio en el momento de la compra, lo cual es una buena práctica).
+FROM cliente c ... INNER JOIN orden o ... INNER JOIN detalle_orden do ... INNER JOIN producto p ...: Realiza los INNER JOIN necesarios para conectar todas las tablas y acceder a la información del cliente, sus órdenes, los detalles de esas órdenes y los productos.
+WHERE c.cedula = '123456': Filtra los resultados para incluir solo las compras realizadas por el cliente con la cedula '123456'. Importante: Confirma el tipo de dato de la columna cedula. Si es numérico (INT), quita las comillas (c.cedula = 123456). Si es de texto (VARCHAR), las comillas son necesarias. Asumo VARCHAR por la naturaleza de los números de identificación.
+GROUP BY p.nombre_producto: Agrupa los resultados por el nombre del producto para que las funciones COUNT y SUM operen sobre cada producto individualmente.
+ORDER BY valor_total_gastado_en_producto DESC: Ordena el resultado final de mayor a menor valor total gastado en cada producto.
 
 ##7. Si necesitas actualizar una tabla histórica con los datos del último mes, y en este nuevo mes has incluido una nueva columna para la ciudad del cliente, ¿qué proceso seguirías para evitar conflictos por diferencia de dimensiones, considerando que no tienes acceso a los comandos ADD COLUMN o ALTER TABLE?
