@@ -1,2 +1,29 @@
 ### Se extrae la informacion de la base de datos dada para hacer un analisis exploratorio que se observa en el Dashboard.
 Se analizo Ejecutivo por su peso , logrando inicialmente estos resultados.
+
+1. Análisis con Python
+
+Hemos identificado los siguientes cargos y su productividad promedio:
+
+cargobase	capt_tot (Productividad Promedio)
+EJECUTIVO COMERCIAL	8.58947
+EJECUTIVO COMERCIAL MEDIO TIEMPO	4.6162
+EJECUTIVO COMERCIAL FIN DE SEMANA	4.28547
+
+El enunciado nos proporciona los costos asociados a cada tipo de empleo:
+
+100% tiempo completo
+50% medio tiempo
+40% fines de semana
+
+Se determina el cargo más conveniente calculando la productividad por unidad de costo. Cuanta productividad se obtiene por cada 'unidad de costo'.
+
+Cargo	 Productividad Promedio (capt_tot)	Costo (%)	Productividad / Costo
+EJECUTIVO COMERCIAL               |	8.58947	|100|	8.58947 / 100 = 0.08589
+EJECUTIVO COMERCIAL  MEDIO TIEMPO |	4.6162	|50 |	4.6162 / 50 = 0.09232
+EJECUTIVO COMERCIAL FIN DE SEMANA |	4.28547	|40 |	4.28547 / 40 = 0.10714
+
+Al comparar la "Productividad / Costo", el EJECUTIVO COMERCIAL FIN DE SEMANA muestra el valor más alto (0.10714), seguido por el EJECUTIVO COMERCIAL MEDIO TIEMPO (0.09232) y finalmente el EJECUTIVO COMERCIAL (0.08589).
+
+Desde estaa perspectiva de eficiencia costo- productividad, se enfocaria en contratar EJECUTIVO COMERCIAL FIN DE SEMANA. Aunque su productividad total individual es menor, su costo proporcionalmente reducido los hace más eficientes en términos de retorno de inversión por unidad de costo.
+
