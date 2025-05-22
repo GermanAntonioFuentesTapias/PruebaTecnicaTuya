@@ -106,7 +106,76 @@ ORDER BY
     Valor_total_en_producto DESC;
 '''
 -- sql Consulta 7
-'''
+1.  **Creación de la Nueva Tabla con Esquema Extendido:**
+    * Se crea una nueva tabla (ej. `historia_ordenes_mensual_v2`) que replica la estructura de la tabla histórica original (`historia_ordenes_mensual`) pero incluyendo la nueva columna `ciudad_cliente` (y cualquier otra columna futura si se anticipa).
 
-'''
+    ```sql
+    -- Ejemplo (asumiendo columnas relevantes de la tabla histórica)
+    CREATE TABLE historia_ordenes_mensual_v2 (
+        id_orden INT,
+        fecha_orden DATETIME,
+        total_pedido DECIMAL(12,2),
+        ciudad_cliente VARCHAR(50) NULL -- Nueva columna
+    );
+    ```
+
+2.  **Migración de Datos Históricos Existentes:**
+    * Se insertan todos los datos de la tabla histórica original (`historia_ordenes_mensual`) en la nueva tabla (`historia_ordenes_mensual_v2`). Para la nueva columna `ciudad_cliente`, se insertará `NULL` o un valor por defecto, ya que esta información no estaba disponible para los períodos anteriores.
+
+    ```sql
+    INSERT INTO historia_ordenes_mensual_v2 (
+        id_orden,
+        fecha_orden,
+        total_pedido
+        -- ... otras columnas
+    )
+    SELECT
+        id_orden,
+        fecha_orden,
+        total_pedido
+    FROM
+        historia_ordenes_mensual;
+    ```
+
+3.  **Carga de los Nuevos Datos del Último Mes:**
+    * Los datos del último mes, que ya incluyen la información de la `ciudad_cliente`, se cargan directamente en la nueva tabla (`historia_ordenes_mensual_v2`). Esto requerirá un proceso de ETL que extraiga la `ciudad_cliente` de su fuente (ej. tabla `cliente`).
+
+    ```sql
+    INSERT INTO historia_ordenes_mensual_v2 (
+        id_orden,
+        fecha_orden,
+        total_pedido,
+        ciudad_cliente
+    )
+    SELECT
+        o.id_orden,
+        o.fecha_orden,
+        o.total_pedido,
+        c.nombre_ciudad 
+        orden o
+    INNER JOIN
+        cliente c ON o.id_cliente = c.id_cliente
+    WHERE
+        o.fecha_orden >= 'YYYY-MM-01' AND o.fecha_orden < 'YYYY-MM-01_siguiente_mes';
+    ```
+
+4.  **Gestión de la Transición:**
+    * Una vez que la nueva tabla (`historia_ordenes_mensual_v2`) esté completa y validada, se debe realizar una transición. Las opciones incluyen:
+        * **Redireccionar Consultas:** Actualizar todas las aplicaciones, reportes y consultas que actualmente utilizan `historia_ordenes_mensual` para que, en su lugar, consulten `historia_ordenes_mensual_v2`. Esta es la opción más segura si las restricciones son muy estrictas.
+        * **Renombrar Tablas (si permitido):** Si el SGBD lo permite y las restricciones de `ALTER TABLE` no se aplican a `RENAME TABLE`, se podría renombrar `historia_ordenes_mensual` a `historia_ordenes_mensual_old` y luego `historia_ordenes_mensual_v2` a `historia_ordenes_mensual`. Sin embargo, esto debe confirmarse ya que el `RENAME` puede tener implicaciones similares a `ALTER`.
+
+5.  **Validación y Limpieza (Opcional):**
+    * Realizar pruebas exhaustivas para asegurar la integridad y la corrección de los datos en la nueva tabla.
+    * Una vez que la nueva tabla esté en producción y funcionando sin problemas, la tabla `historia_ordenes_mensual_old` puede ser archivada o eliminada.1.  **Creación de la Nueva Tabla con Esquema Extendido:**
+    * Se crea una nueva tabla pero incluyendo la nueva columna `ciudad_cliente` (y cualquier otra columna futura si se anticipa).
+
+    ```sql
+    -- Ejemplo (asumiendo columnas relevantes de la tabla histórica)
+    CREATE TABLE historia_ordenes_mensual_v2 (
+        id_orden INT,
+        fecha_orden DATETIME,
+        total_pedido DECIMAL(12,2),
+        ciudad_cliente VARCHAR(50) NULL -- Nueva columna
+    );
+    ```
 
