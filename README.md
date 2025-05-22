@@ -49,3 +49,7 @@ GROUP BY p.nombre_producto: Agrupa los resultados por el nombre del producto par
 ORDER BY valor_total_gastado_en_producto DESC: Ordena el resultado final de mayor a menor valor total gastado en cada producto.
 
 ##7. Si necesitas actualizar una tabla histórica con los datos del último mes, y en este nuevo mes has incluido una nueva columna para la ciudad del cliente, ¿qué proceso seguirías para evitar conflictos por diferencia de dimensiones, considerando que no tienes acceso a los comandos ADD COLUMN o ALTER TABLE?
+
+El proceso con mas detalle de la consulta o pregunta 7 se encuentra en fase1_sql con mayor claridad.
+
+Fase 2. Se desarrollo en
